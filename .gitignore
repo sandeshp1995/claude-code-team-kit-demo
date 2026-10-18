@@ -1,0 +1,22 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Claude Code Team Kit Pro files are installed locally but not published.
+# Their results are visible in this repo's pull requests and docs/demo/.
+# Get them at https://racecraft9.gumroad.com/l/claude-code-team-kit
+.claude/agents/
+.claude/rules/
+.claude/skills/review/
+.claude/skills/mr-description/
+.claude/skills/mr-status/
+.claude/skills/release-notes/
+.claude/skills/test-changed/
+.claude/skills/safe-refactor/
+.claude/skills/onboard/
+.claude/skills/ticket-to-plan/

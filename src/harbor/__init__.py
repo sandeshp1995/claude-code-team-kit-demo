@@ -1,0 +1,1 @@
+"""Harbor Hotel bookings API."""

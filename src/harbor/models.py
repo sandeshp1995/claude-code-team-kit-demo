@@ -33,3 +33,15 @@ class Booking:
     @property
     def nights(self) -> int:
         return (self.check_out - self.check_in).days
+
+
+@dataclass(frozen=True)
+class Arrival:
+    """A booking starting on a given day, with the details the front desk needs."""
+
+    booking_id: str
+    guest_id: str
+    room_number: str
+    room_kind: str
+    nights: int
+    total_minor: int

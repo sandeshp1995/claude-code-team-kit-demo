@@ -41,6 +41,7 @@ class BookingOut(BaseModel):
     status: str
     total_minor: int
     currency: str = "USD"
+    refund_minor: int | None = None
 
     @classmethod
     def from_domain(cls, booking: Booking) -> "BookingOut":
@@ -53,4 +54,5 @@ class BookingOut(BaseModel):
             guests=booking.guests,
             status=booking.status.value,
             total_minor=booking.total_minor,
+            refund_minor=booking.refund_minor,
         )

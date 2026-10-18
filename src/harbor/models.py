@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class BookingStatus(StrEnum):
     CONFIRMED = "confirmed"
+    CANCELLED = "cancelled"
 
 
 @dataclass(frozen=True)
@@ -27,6 +28,7 @@ class Booking:
     guests: int
     status: BookingStatus
     total_minor: int
+    refund_minor: int | None = None
 
     @property
     def nights(self) -> int:

@@ -10,7 +10,7 @@ Every plan, review, test, commit message, PR description and release note here w
 |---|---|
 | `/ticket-to-plan` | The plan comment at the top of each feature pull request |
 | `/test-changed` | The tests added in each feature PR, and the run results in its comments |
-| `/review` | Review comments on the pull requests, including one on a teammate's PR with real findings |
+| `/review` | Review comments on the pull requests, including one on a deliberately rough PR, written by hand to show what it catches |
 | `/commit-msg` | The commit history |
 | `/mr-description` | Every pull request description |
 | `/release-notes` | [CHANGELOG.md](CHANGELOG.md) |

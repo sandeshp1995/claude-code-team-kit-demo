@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from harbor.api.routes import router
+from harbor.api.staff import router as staff_router
 from harbor.errors import ConflictError, HarborError, NotFoundError, ValidationError
 from harbor.repositories.memory import InMemoryStore
 
@@ -18,6 +19,7 @@ def create_app(store: InMemoryStore | None = None) -> FastAPI:
     app = FastAPI(title="Harbor Hotel API", version="0.1.0")
     app.state.store = store or InMemoryStore()
     app.include_router(router)
+    app.include_router(staff_router)
 
     @app.exception_handler(HarborError)
     async def handle_domain_error(_: Request, exc: HarborError) -> JSONResponse:

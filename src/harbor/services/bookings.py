@@ -8,6 +8,7 @@ from harbor.models import Booking, BookingStatus
 from harbor.repositories.memory import InMemoryStore
 
 MAX_NIGHTS = 30
+CANCEL_NOTICE_DAYS = 2
 
 
 def _overlaps(a_in: date, a_out: date, b_in: date, b_out: date) -> bool:
@@ -63,4 +64,19 @@ def get_booking_for_guest(store: InMemoryStore, *, booking_id: str, guest_id: st
     booking = store.get_booking(booking_id)
     if booking is None or booking.guest_id != guest_id:
         raise NotFoundError("Booking not found")
+    return booking
+
+
+def cancel_booking(store: InMemoryStore, *, booking_id: str, guest_id: str, today: date) -> Booking:
+    """Cancel a confirmed booking at least CANCEL_NOTICE_DAYS before check-in."""
+    booking = get_booking_for_guest(store, booking_id=booking_id, guest_id=guest_id)
+    if booking.status is not BookingStatus.CONFIRMED:
+        raise ConflictError("Only confirmed bookings can be cancelled")
+    if (booking.check_in - today).days < CANCEL_NOTICE_DAYS:
+        raise ConflictError(
+            f"Bookings can only be cancelled at least {CANCEL_NOTICE_DAYS * 24} hours "
+            "before check-in"
+        )
+
+    booking.status = BookingStatus.CANCELLED
     return booking

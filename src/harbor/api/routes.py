@@ -56,3 +56,11 @@ def create_booking(
 def get_booking(booking_id: str, guest: Guest, store: Store) -> BookingOut:
     booking = booking_service.get_booking_for_guest(store, booking_id=booking_id, guest_id=guest)
     return BookingOut.from_domain(booking)
+
+
+@router.post("/bookings/{booking_id}/cancel", response_model=BookingOut)
+def cancel_booking(booking_id: str, guest: Guest, store: Store, today: Today) -> BookingOut:
+    booking = booking_service.cancel_booking(
+        store, booking_id=booking_id, guest_id=guest, today=today
+    )
+    return BookingOut.from_domain(booking)

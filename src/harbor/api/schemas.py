@@ -4,7 +4,7 @@ from datetime import date
 
 from pydantic import BaseModel, Field
 
-from harbor.models import Booking, BookingStatus, Room
+from harbor.models import Booking, Room
 
 
 class RoomOut(BaseModel):
@@ -54,7 +54,5 @@ class BookingOut(BaseModel):
             guests=booking.guests,
             status=booking.status.value,
             total_minor=booking.total_minor,
-            refund_minor=(
-                booking.total_minor if booking.status is BookingStatus.CANCELLED else None
-            ),
+            refund_minor=booking.refund_minor,
         )

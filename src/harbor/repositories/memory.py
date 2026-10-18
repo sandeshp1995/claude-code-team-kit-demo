@@ -23,6 +23,9 @@ class InMemoryStore:
     def add_booking(self, booking: Booking) -> None:
         self._bookings[booking.id] = booking
 
+    def update_booking(self, booking: Booking) -> None:
+        self._bookings[booking.id] = booking
+
     def get_booking(self, booking_id: str) -> Booking | None:
         return self._bookings.get(booking_id)
 

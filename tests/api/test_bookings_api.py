@@ -71,7 +71,7 @@ def test_cancel_booking_refunds_the_full_total(client: TestClient) -> None:
 
     response = client.post(f"/bookings/{created['id']}/cancel", headers=ALICE)
 
-    assert response.json()["refund_minor"] == 24_000
+    assert response.json()["refund_minor"] == created["total_minor"]
 
 
 def test_confirmed_booking_has_no_refund(client: TestClient) -> None:

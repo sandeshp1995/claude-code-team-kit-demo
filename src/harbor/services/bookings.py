@@ -1,6 +1,7 @@
 """Booking rules. No framework imports: these functions are tested without HTTP."""
 
 import uuid
+from dataclasses import replace
 from datetime import date
 
 from harbor.errors import ConflictError, NotFoundError, ValidationError
@@ -74,9 +75,10 @@ def cancel_booking(store: InMemoryStore, *, booking_id: str, guest_id: str, toda
         raise ConflictError("Only confirmed bookings can be cancelled")
     if (booking.check_in - today).days < CANCEL_NOTICE_DAYS:
         raise ConflictError(
-            f"Bookings can only be cancelled at least {CANCEL_NOTICE_DAYS * 24} hours "
-            "before check-in"
+            f"Bookings can only be cancelled at least {CANCEL_NOTICE_DAYS} days before check-in"
         )
 
-    booking.status = BookingStatus.CANCELLED
-    return booking
+    # Refund policy: a cancellation inside the allowed window refunds the full total.
+    cancelled = replace(booking, status=BookingStatus.CANCELLED, refund_minor=booking.total_minor)
+    store.update_booking(cancelled)
+    return cancelled

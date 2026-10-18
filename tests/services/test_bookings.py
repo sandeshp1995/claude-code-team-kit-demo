@@ -93,6 +93,18 @@ def test_cancel_booking_persists_cancelled_status() -> None:
 
     reloaded = get_booking_for_guest(store, booking_id=booking.id, guest_id="guest-alice")
     assert reloaded.status is BookingStatus.CANCELLED
+    assert booking.status is BookingStatus.CONFIRMED
+
+
+def test_cancel_booking_stores_full_refund_on_booking() -> None:
+    store = InMemoryStore()
+    booking = book(store)
+
+    cancelled = cancel_booking(store, booking_id=booking.id, guest_id="guest-alice", today=TODAY)
+
+    reloaded = get_booking_for_guest(store, booking_id=booking.id, guest_id="guest-alice")
+    assert cancelled.refund_minor == booking.total_minor
+    assert reloaded.refund_minor == booking.total_minor
 
 
 def test_cancel_booking_allowed_exactly_at_notice_boundary() -> None:

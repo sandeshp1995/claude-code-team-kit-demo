@@ -4,7 +4,7 @@ from datetime import date
 
 from pydantic import BaseModel, Field
 
-from harbor.models import Booking, Room
+from harbor.models import Arrival, Booking, Room
 
 
 class RoomOut(BaseModel):
@@ -55,4 +55,25 @@ class BookingOut(BaseModel):
             status=booking.status.value,
             total_minor=booking.total_minor,
             refund_minor=booking.refund_minor,
+        )
+
+
+class ArrivalOut(BaseModel):
+    booking_id: str
+    guest_id: str
+    room: str
+    room_kind: str
+    nights: int
+    total_minor: int
+    currency: str = "USD"
+
+    @classmethod
+    def from_domain(cls, arrival: Arrival) -> "ArrivalOut":
+        return cls(
+            booking_id=arrival.booking_id,
+            guest_id=arrival.guest_id,
+            room=arrival.room_number,
+            room_kind=arrival.room_kind,
+            nights=arrival.nights,
+            total_minor=arrival.total_minor,
         )

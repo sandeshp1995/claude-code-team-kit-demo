@@ -10,6 +10,7 @@ from harbor.repositories.memory import InMemoryStore
 TODAY = date(2026, 11, 2)
 ALICE = {"Authorization": "Bearer demo-token-alice"}
 BOB = {"Authorization": "Bearer demo-token-bob"}
+STAFF = {"Authorization": "Bearer demo-token-staff"}
 
 
 @pytest.fixture

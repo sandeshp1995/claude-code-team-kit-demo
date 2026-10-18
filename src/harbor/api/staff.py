@@ -1,31 +1,25 @@
-"""Front-desk endpoints."""
+"""Front-desk endpoints. Staff only."""
 
-from datetime import datetime
+import logging
+from datetime import date
+from typing import Annotated
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 
-from harbor.auth import current_guest
+from harbor.api.routes import Store
+from harbor.api.schemas import ArrivalOut
+from harbor.auth import current_staff
+from harbor.services import arrivals as arrivals_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+Staff = Annotated[str, Depends(current_staff)]
 
-@router.get("/staff/arrivals")
-def arrivals(request: Request, day: str, guest: str = Depends(current_guest)):
-    store = request.app.state.store
-    target = datetime.strptime(day, "%Y-%m-%d").date()
-    print("arrivals requested by", guest, "for", day)
-    result = []
-    for booking in store._bookings.values():
-        if booking.check_in == target:
-            room = store.get_room(booking.room_number)
-            result.append(
-                {
-                    "booking_id": booking.id,
-                    "guest_id": booking.guest_id,
-                    "room": booking.room_number,
-                    "room_kind": room.kind,
-                    "nights": booking.nights,
-                    "amount_due": booking.total_minor / 100,
-                }
-            )
-    return result
+
+@router.get("/staff/arrivals", response_model=list[ArrivalOut])
+def arrivals(day: date, _staff: Staff, store: Store) -> list[ArrivalOut]:
+    """List the arrivals for a day, ordered by room number."""
+    logger.info("arrivals requested for %s", day)
+    return [ArrivalOut.from_domain(a) for a in arrivals_service.arrivals_on(store, day)]

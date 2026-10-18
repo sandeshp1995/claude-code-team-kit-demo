@@ -1,5 +1,7 @@
 """In-memory storage. Swappable for a database-backed repository later."""
 
+from datetime import date
+
 from harbor.models import Booking, Room
 
 SEED_ROOMS = (
@@ -31,3 +33,6 @@ class InMemoryStore:
 
     def bookings_for_room(self, room_number: str) -> list[Booking]:
         return [b for b in self._bookings.values() if b.room_number == room_number]
+
+    def bookings_starting_on(self, day: date) -> list[Booking]:
+        return [b for b in self._bookings.values() if b.check_in == day]

@@ -64,4 +64,4 @@ Always run tools through `uv run ...`. Never `pip install` into the global inter
 
 ## Team notes
 
-- `auth.py` uses static demo tokens (`demo-token-alice`, `demo-token-bob`). They are intentionally public; real auth is out of scope for the demo.
+- `auth.py` uses static demo tokens: `demo-token-alice` and `demo-token-bob` (guests) and `demo-token-staff` (front desk, can read every guest's arrivals). All are intentionally public and demo-only; never copy them into a real deployment.
